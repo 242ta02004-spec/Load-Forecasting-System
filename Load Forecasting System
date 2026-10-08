@@ -1,0 +1,73 @@
+
+# Load Forecasting System
+# EEE Mini Project - Python
+# Forecast electricity demand using moving average
+
+def load_forecasting_system():
+    print("=" * 45)
+    print("       ELECTRICAL LOAD FORECASTING")
+    print("=" * 45)
+
+    try:
+        n = int(input("Enter number of historical load readings: "))
+
+        if n < 2:
+            print("Please enter at least 2 readings.")
+            return
+
+        loads = []
+
+        for i in range(n):
+            load = float(input(f"Enter load for hour {i + 1} (kW): "))
+
+            if load < 0:
+                print("Load cannot be negative.")
+                return
+
+            loads.append(load)
+
+        window = int(input(
+            "Enter number of recent readings for moving average: "
+        ))
+
+        if window < 1 or window > n:
+            print("Window must be between 1 and the number of readings.")
+            return
+
+        # Forecast is the average of the most recent readings
+        recent_loads = loads[-window:]
+        forecast = sum(recent_loads) / window
+
+        average_load = sum(loads) / len(loads)
+        peak_load = max(loads)
+        minimum_load = min(loads)
+
+        print("\n" + "=" * 45)
+        print("           FORECAST REPORT")
+        print("=" * 45)
+
+        print("\nHistorical Load Data:")
+        for i, load in enumerate(loads, start=1):
+            print(f"Hour {i}: {load:.2f} kW")
+
+        print("\nLoad Statistics")
+        print(f"Average historical load : {average_load:.2f} kW")
+        print(f"Peak historical load    : {peak_load:.2f} kW")
+        print(f"Minimum historical load : {minimum_load:.2f} kW")
+
+        print("\nNext-Hour Forecast")
+        print(f"Forecast load           : {forecast:.2f} kW")
+
+        if forecast >= 0.9 * peak_load:
+            print("Alert: High load expected.")
+        else:
+            print("Status: Normal load expected.")
+
+        print("\nForecasting completed.")
+
+    except ValueError:
+        print("Invalid input. Please enter numeric values.")
+
+
+if __name__ == "__main__":
+    load_forecasting_system()
